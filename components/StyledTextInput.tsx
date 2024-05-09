@@ -7,26 +7,32 @@ import {
   View,
 } from 'react-native';
 
-interface StyledTextInput {
+interface StyledTextInputProps extends TextInputProps {
   label?: string;
   error?: string;
+  isReadOnly?: boolean;
 }
 
-const StyledTextInput: React.FC<StyledTextInput & TextInputProps> = ({
+const StyledTextInput: React.FC<StyledTextInputProps> = ({
   label,
   error,
   style,
+  isReadOnly = false,
   ...props
 }) => {
   return (
     <View style={styles.container}>
       {label && (
-        <Text style={styles.label} {...props}>
+        <Text style={styles.label}>
           {label}
         </Text>
       )}
       <View>
-        <TextInput style={[styles.textInput, style]} {...props} />
+        <TextInput
+          style={[styles.textInput, style, isReadOnly && styles.readOnlyInput]}
+          editable={!isReadOnly}
+          {...props}
+        />
         {error && <Text style={styles.error}>{error}</Text>}
       </View>
     </View>
@@ -48,7 +54,10 @@ const styles = StyleSheet.create({
     width: '100%',
     borderRadius: 10,
     paddingHorizontal: 10,
-    paddingVertical: 4,
+    paddingVertical: 8,
+  },
+  readOnlyInput: {
+    backgroundColor: '#E8E8E8',
   },
   error: {
     color: 'red',
