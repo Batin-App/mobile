@@ -22,11 +22,7 @@ const StyledTextInput: React.FC<StyledTextInputProps> = ({
 }) => {
   return (
     <View style={styles.container}>
-      {label && (
-        <Text style={styles.label}>
-          {label}
-        </Text>
-      )}
+      {label && <Text style={styles.label}>{label}</Text>}
       <View>
         <TextInput
           style={[styles.textInput, style, isReadOnly && styles.readOnlyInput]}
@@ -58,6 +54,7 @@ const styles = StyleSheet.create({
   },
   readOnlyInput: {
     backgroundColor: '#E8E8E8',
+    borderWidth: 0,
   },
   error: {
     color: 'red',

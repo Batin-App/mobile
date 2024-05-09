@@ -59,7 +59,7 @@ const ActivityList: React.FC = () => {
         },
       );
       const responseJson = await response.json();
-      console.log(responseJson);
+
       if (!response.ok) {
         throw new Error(responseJson.message);
       }

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, ToastAndroid, View } from 'react-native';
 import {
   AuthScreenBackground,
   StyledButton,
@@ -23,11 +23,32 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
   const [password, setPassword] = useState<string>('');
 
   const signInHandler = async () => {
-    await setItemAsync(
-      'AT',
-      'c4ec1977d8034609b9e86162c697a2a01e16bf49f154ae9f3de1ee4f58e5354fe481b019$$329def26a3705ac9ec6c00876866b7b5$$a2656022adc8ad130888cef0',
-    );
-    navigation.navigate('Home');
+    try {
+      const response = await fetch(`${process.env.API_URL}/auth/login`, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      });
+
+      const responseJson = await response.json();
+
+      if (!response.ok) {
+        throw new Error(responseJson.message);
+      }
+
+      await setItemAsync('AT', responseJson.token);
+
+      ToastAndroid.show('Login berhasil!', 5);
+      navigation.navigate('Home');
+    } catch (err: any) {
+      ToastAndroid.show(err.message, 5);
+    }
   };
 
   return (
