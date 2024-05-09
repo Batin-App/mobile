@@ -3,8 +3,6 @@ import { Image, StyleSheet, Text, View } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from 'App';
 import { ActivityList, Recommendation, StyledButton } from '@components';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import { LinearGradient } from 'expo-linear-gradient';
 
 type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Home'>;
 
@@ -35,7 +33,7 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
           style={{ position: 'absolute', right: 5, top: '20%' }}
         />
       </View>
-      <View style={{ paddingHorizontal: 20 }}>
+      <View style={{ paddingHorizontal: 20, backgroundColor: '', flex: 1 }}>
         <View
           style={{
             flexDirection: 'row',

@@ -7,6 +7,7 @@ import {
 } from '@components';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from 'App';
+import { setItemAsync } from 'expo-secure-store';
 
 type LoginScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -21,7 +22,11 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 
-  const signInHandler = () => {
+  const signInHandler = async () => {
+    await setItemAsync(
+      'AT',
+      '0795719d5ddef3f2b27fcce692e83943d5e8e19097711ee232fe682d47efe8a3d8ce253e$$e7f1f315da14a58066df0ceeb981d691$$7be8ac0cfec7eef2151b9793',
+    );
     navigation.navigate('Home');
   };
 

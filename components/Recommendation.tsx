@@ -1,16 +1,11 @@
-import { Text, View } from 'react-native';
-import DropDownPicker from 'react-native-dropdown-picker';
+import { Text, ToastAndroid, View } from 'react-native';
 import { useState } from 'react';
 import { StyledButton } from './StyledButton';
 import { LinearGradient } from 'expo-linear-gradient';
-
-const OPTIONS = ['joy', 'love', 'anger', 'fear', 'surprise'];
-type OptionType = (typeof OPTIONS)[number];
+import { getItemAsync } from 'expo-secure-store';
 
 const Recommendation: React.FC = () => {
-  const [open, setOpen] = useState<boolean>(false);
-  const [value, setValue] = useState<OptionType>(OPTIONS[0]);
-  const [showRecommended, setShowRecommended] = useState<boolean>(false);
+  const [recommendations, setRecommendations] = useState<string[]>([]);
 
   const ACTIVITES = [
     'Reading Book',
@@ -20,40 +15,35 @@ const Recommendation: React.FC = () => {
     'Washing Dishes',
   ];
 
-  const items = OPTIONS.map((option) => ({
-    label: option.charAt(0).toUpperCase() + option.slice(1),
-    value: option,
-  }));
+  const getRecommendation = async () => {
+    try {
+      const response = await fetch(`${process.env.API_URL}/recommendations`, {
+        headers: {
+          Authorization: `Bearer ${await getItemAsync('AT')}`,
+        },
+      });
+
+      const responseJson = await response.json();
+      console.log(responseJson);
+    } catch (err: any) {
+      ToastAndroid.show(err.message, 5);
+    }
+  };
+
   return (
     <View
       style={{
         paddingHorizontal: 30,
         justifyContent: 'center',
-        marginTop: showRecommended ? 30 : 150,
+        marginTop: recommendations.length !== 0 ? 30 : 150,
       }}
     >
       <Text style={{ color: '#FFC700', fontWeight: 'bold', paddingBottom: 8 }}>
         What do you feel right now?
       </Text>
-      <DropDownPicker
-        style={{
-          minHeight: 40,
-          borderRadius: 10,
-          borderColor: '#00000070',
-          borderWidth: 2,
-        }}
-        containerStyle={{ paddingBottom: 10 }}
-        open={open}
-        setOpen={setOpen}
-        value={value}
-        setValue={setValue}
-        items={items}
-      />
-      <StyledButton
-        onPress={() => setShowRecommended(true)}
-        title="Recommend Something"
-      />
-      {showRecommended && (
+
+      <StyledButton onPress={getRecommendation} title="Recommend Something" />
+      {recommendations.length !== 0 && (
         <>
           <View
             style={{

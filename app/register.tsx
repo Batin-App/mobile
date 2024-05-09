@@ -60,14 +60,6 @@ const RegisterScreen: React.FC<Props> = ({ navigation }) => {
     }
     try {
       setLoading(true);
-      console.log(
-        JSON.stringify({
-          email,
-          password,
-          gender,
-          birthDate: birthdate,
-        }),
-      );
 
       const response = await fetch(`${process.env.API_URL}/auth/register`, {
         method: 'POST',
