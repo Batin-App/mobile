@@ -1,4 +1,4 @@
-import { Text, ToastAndroid, View } from 'react-native';
+import { ScrollView, Text, ToastAndroid, View } from 'react-native';
 import { useState } from 'react';
 import { StyledButton } from './StyledButton';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -6,14 +6,6 @@ import { getItemAsync } from 'expo-secure-store';
 
 const Recommendation: React.FC = () => {
   const [recommendations, setRecommendations] = useState<string[]>([]);
-
-  const ACTIVITES = [
-    'Reading Book',
-    'Watching TV',
-    'Studying',
-    'Playing Piano',
-    'Washing Dishes',
-  ];
 
   const getRecommendation = async () => {
     try {
@@ -24,7 +16,11 @@ const Recommendation: React.FC = () => {
       });
 
       const responseJson = await response.json();
-      console.log(responseJson);
+      const activitiesArray = responseJson.recommendedActivities
+        .split(/\d+\.\s+/)
+        .filter((text: string) => text.trim().length > 0)
+        .map((text: string) => text.trim());
+      setRecommendations(activitiesArray);
     } catch (err: any) {
       ToastAndroid.show(err.message, 5);
     }
@@ -33,9 +29,10 @@ const Recommendation: React.FC = () => {
   return (
     <View
       style={{
+        flex: 1,
         paddingHorizontal: 30,
+        paddingVertical: 30,
         justifyContent: 'center',
-        marginTop: recommendations.length !== 0 ? 30 : 150,
       }}
     >
       <Text style={{ color: '#FFC700', fontWeight: 'bold', paddingBottom: 8 }}>
@@ -58,51 +55,54 @@ const Recommendation: React.FC = () => {
               Recommended Activity
             </Text>
           </View>
-          <View>
-            <View style={{ gap: 10 }}>
-              <View
-                style={{
-                  width: '100%',
-                  height: 1,
-                  backgroundColor: '#9e9e9e50',
-                }}
-              />
-              {ACTIVITES.map((activity, index) => (
-                <>
-                  <LinearGradient
-                    key={index}
-                    start={{ x: 0, y: 1 }}
-                    end={{ x: 1, y: 1 }}
-                    colors={['#CD7E17', '#FABF02']}
-                    style={{
-                      borderRadius: 10,
-                      shadowColor: 'black',
-                      shadowOffset: { width: 0, height: 4 },
-                      shadowOpacity: 0.25,
-                      shadowRadius: 3,
-                      elevation: 3,
-                    }}
-                  >
-                    <Text
+          <View style={{ flex: 1 }}>
+            <ScrollView>
+              <View style={{ gap: 10 }}>
+                <View
+                  style={{
+                    width: '100%',
+                    height: 1,
+                    backgroundColor: '#9e9e9e50',
+                  }}
+                />
+                {recommendations.map((activity, index) => (
+                  <>
+                    <LinearGradient
+                      key={`recommendation-${index}`}
+                      start={{ x: 0, y: 1 }}
+                      end={{ x: 1, y: 1 }}
+                      colors={['#CD7E17', '#FABF02']}
                       style={{
-                        color: 'white',
-                        fontWeight: 'bold',
-                        padding: 10,
+                        borderRadius: 10,
+                        shadowColor: 'black',
+                        shadowOffset: { width: 0, height: 4 },
+                        shadowOpacity: 0.25,
+                        shadowRadius: 3,
+                        elevation: 3,
                       }}
                     >
-                      {activity}
-                    </Text>
-                  </LinearGradient>
-                  <View
-                    style={{
-                      width: '100%',
-                      height: 1,
-                      backgroundColor: '#9e9e9e50',
-                    }}
-                  />
-                </>
-              ))}
-            </View>
+                      <Text
+                        key={`line-${index}`}
+                        style={{
+                          color: 'white',
+                          fontWeight: 'bold',
+                          padding: 10,
+                        }}
+                      >
+                        {activity}
+                      </Text>
+                    </LinearGradient>
+                    <View
+                      style={{
+                        width: '100%',
+                        height: 1,
+                        backgroundColor: '#9e9e9e50',
+                      }}
+                    />
+                  </>
+                ))}
+              </View>
+            </ScrollView>
           </View>
         </>
       )}

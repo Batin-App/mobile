@@ -25,7 +25,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
   const signInHandler = async () => {
     await setItemAsync(
       'AT',
-      '0795719d5ddef3f2b27fcce692e83943d5e8e19097711ee232fe682d47efe8a3d8ce253e$$e7f1f315da14a58066df0ceeb981d691$$7be8ac0cfec7eef2151b9793',
+      'c4ec1977d8034609b9e86162c697a2a01e16bf49f154ae9f3de1ee4f58e5354fe481b019$$329def26a3705ac9ec6c00876866b7b5$$a2656022adc8ad130888cef0',
     );
     navigation.navigate('Home');
   };

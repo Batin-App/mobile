@@ -39,6 +39,7 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
             flexDirection: 'row',
             width: '100%',
             gap: 10,
+            justifyContent: 'center',
           }}
         >
           <StyledButton
